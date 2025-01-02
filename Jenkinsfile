@@ -111,3 +111,57 @@ pipeline {
         }
     }
 }
+
+
+
+or
+
+
+
+pipeline {
+    agent any
+    tools {
+        maven 'MAVEN_HOME'
+    }
+    triggers {
+        githubPush()
+    }
+    stages {
+        stage('Git Clone') {
+            steps {
+                bat 'C:\\Windows\\System32\\cmd.exe /c rmdir /s /q ProjectJenkins || echo "No existing directory to delete"'
+                bat 'C:\\Windows\\System32\\cmd.exe /c git clone https://github.com/Gayatri2004-09/ProjectJenkins.git'
+            }
+        }
+        stage('Maven Build') {
+            steps {
+                dir('ProjectJenkins') {
+                    bat '"C:\\Program Files\\apache-maven-3.9.9\\bin\\mvn.cmd" clean install'
+                }
+            }
+        }
+        stage('Maven Test') {
+            steps {
+                dir('ProjectJenkins') {
+                    bat '"C:\\Program Files\\apache-maven-3.9.9\\bin\\mvn.cmd" test'
+                }
+            }
+        }
+        stage('Maven Package') {
+            steps {
+                dir('ProjectJenkins') {
+                    bat '"C:\\Program Files\\apache-maven-3.9.9\\bin\\mvn.cmd" package'
+                }
+            }
+        }
+    }
+    post {
+        success {
+            echo ' Build and deployment completed successfully!'
+        }
+        failure {
+            echo ' Build or deployment failed. Check the logs for errors.'
+        }
+    }
+}
+
