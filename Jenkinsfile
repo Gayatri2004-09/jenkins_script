@@ -67,3 +67,47 @@ pipeline {
         }
     }
 } 
+
+
+
+or
+
+
+pipeline {
+    agent any
+    tools {
+        maven 'MAVEN_HOME'
+    }
+    stages {
+        stage('Git Repo & Clean') {
+            steps {
+                bat "rmdir /s /q SampleMavenJavaProject"
+                bat "git clone https://github.com/budarajumadhurika/SampleMavenJavaProject.git"
+                bat "mvn clean -f SampleMavenJavaProject/pom.xml"
+            }
+        }
+        stage('Install') {
+            steps {
+                bat "mvn install -f SampleMavenJavaProject/pom.xml"
+            }
+        }
+        stage('Test') {
+            steps {
+                bat "mvn test -f SampleMavenJavaProject/pom.xml"
+            }
+        }
+        stage('Package') {
+            steps {
+                bat "mvn package -f SampleMavenJavaProject/pom.xml"
+            }
+        }
+    }
+    post {
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check the logs for more details.'
+        }
+    }
+}
