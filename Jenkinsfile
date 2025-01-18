@@ -165,3 +165,14 @@ pipeline {
     }
 }
 
+
+
+
+
+
+
+<user username="admin" password="12345" roles="manager-gui, admin-gui ,manager-script"/>
+
+
+    <role rolename="admin-gui,manager-gui,manager-script,manager-jmx,manager-status"/>
+<user username="admin" password="12345" roles="manager-gui,admin-gui,manager-script"/>
